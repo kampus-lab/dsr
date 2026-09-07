@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Design Science Research Process</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EEE3;
+    --paper-line:#D9D2BC;
+    --ink:#1E2430;
+    --ink-soft:#5B5F6E;
+    --rigor:#33507E;
+    --rigor-tint:#E3E9F2;
+    --relevance:#A06B2B;
+    --relevance-tint:#F1E6D3;
+    --design:#6E2E36;
+    --design-tint:#F1E0E1;
+    --sans:'IBM Plex Sans', sans-serif;
+    --serif:'Source Serif 4', serif;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background-color:var(--paper);
+    background-image:radial-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size:24px 24px;
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 72px;}
+
+  header{margin-bottom:8px;}
+  .kicker{
+    font-family:var(--mono);
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(1.9rem, 4vw, 2.7rem);
+    line-height:1.15;
+    margin:0 0 14px;
+    max-width:16ch;
+  }
+  .lede{
+    font-size:1.02rem;
+    color:var(--ink-soft);
+    max-width:62ch;
+    margin:0 0 36px;
+  }
+
+  /* Tabs */
+  .tabs{display:flex;gap:28px;margin-bottom:32px;border-bottom:1.5px solid var(--paper-line);}
+  .tab{
+    font-family:var(--sans);
+    font-weight:500;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    background:none;
+    border:none;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1.5px;
+    padding:0 0 13px;
+    cursor:pointer;
+  }
+  .tab:hover{color:var(--ink);}
+  .tab.active{color:var(--ink);border-bottom-color:var(--design);}
+  .tab:focus-visible, .node:focus-visible, .step:focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
+
+  section.view{display:none;}
+  section.view.active{display:block;}
+
+  /* ---- Three cycles diagram ---- */
+  .diagram{display:flex;align-items:stretch;margin:8px 0 20px;}
+  .node{
+    flex:1;
+    background:#fff;
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    padding:20px 16px;
+    text-align:left;
+    cursor:pointer;
+    font-family:var(--sans);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .node .icon{font-size:1.3rem;line-height:1;margin-bottom:2px;}
+  .node .name{font-weight:600;font-size:1rem;line-height:1.3;}
+  .node .sub{font-size:0.82rem;color:var(--ink-soft);line-height:1.4;}
+  .node:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(30,36,48,0.08);}
+  .node.active{box-shadow:0 6px 14px rgba(30,36,48,0.1);}
+  .node[data-id="environment"].active{border-color:var(--relevance);background:var(--relevance-tint);}
+  .node[data-id="design"].active{border-color:var(--design);background:var(--design-tint);}
+  .node[data-id="knowledge"].active{border-color:var(--rigor);background:var(--rigor-tint);}
+
+  .connector{display:flex;flex-direction:column;align-items:center;justify-content:center;width:104px;flex-shrink:0;padding:0 6px;}
+  .connector .arrow-h{font-size:1.5rem;color:var(--ink-soft);}
+  .connector .arrow-v{display:none;font-size:1.5rem;color:var(--ink-soft);}
+  .connector .clabel{font-family:var(--mono);font-size:0.64rem;letter-spacing:0.01em;color:var(--ink-soft);text-align:center;margin-top:4px;line-height:1.4;}
+
+  @media (max-width:680px){
+    .diagram{flex-direction:column;gap:2px;}
+    .connector{width:auto;height:auto;padding:8px 0;flex-direction:row;gap:10px;}
+    .connector .arrow-h{display:none;}
+    .connector .arrow-v{display:inline;}
+    .connector .clabel{margin-top:0;text-align:left;}
+  }
+
+  /* Detail panel */
+  .detail{
+    border-top:1.5px solid var(--paper-line);
+    padding-top:20px;
+    margin-top:8px;
+    min-height:150px;
+  }
+  .detail h3{
+    font-family:var(--serif);
+    font-size:1.25rem;
+    margin:0 0 10px;
+  }
+  .detail p{
+    max-width:66ch;
+    color:var(--ink);
+    margin:0 0 14px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:var(--mono);
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    border:1px solid var(--paper-line);
+    background:#fff;
+    padding:4px 9px;
+    border-radius:5px;
+  }
+
+  /* ---- Six-step process ---- */
+  .steps{
+    display:flex;
+    align-items:stretch;
+    gap:6px;
+    margin:8px 0 6px;
+  }
+  .step{
+    flex:1;
+    background:#fff;
+    border:1.5px solid var(--ink);
+    border-radius:10px;
+    padding:14px 10px;
+    text-align:center;
+    cursor:pointer;
+    font-family:var(--sans);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    position:relative;
+  }
+  .step .num{
+    font-family:var(--mono);
+    font-weight:500;
+    width:26px;height:26px;
+    border-radius:50%;
+    border:1.5px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.82rem;
+  }
+  .step .label{font-size:0.78rem;font-weight:500;line-height:1.3;min-height:2.6em;display:flex;align-items:center;}
+  .step:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(30,36,48,0.08);}
+  .step.active{border-color:var(--design);background:var(--design-tint);box-shadow:0 6px 14px rgba(30,36,48,0.1);}
+  .step.active .num{border-color:var(--design);background:var(--design);color:#fff;}
+  .sep{display:flex;align-items:center;justify-content:center;color:var(--ink-soft);font-size:1.1rem;flex-shrink:0;width:20px;}
+  .badge{
+    font-family:var(--mono);
+    font-size:0.6rem;
+    letter-spacing:0.01em;
+    background:var(--ink);
+    color:var(--paper);
+    padding:2px 7px;
+    border-radius:9px;
+    white-space:nowrap;
+  }
+  @media (max-width:760px){
+    .steps{flex-direction:column;gap:2px;}
+    .step{flex-direction:row;text-align:left;padding:12px 14px;justify-content:flex-start;}
+    .step .label{min-height:0;}
+    .sep{transform:rotate(90deg);align-self:center;width:auto;margin:-2px 0;}
+    .badge{margin-left:auto;}
+  }
+
+  .entry-note{
+    font-size:0.88rem;
+    color:var(--ink-soft);
+    max-width:66ch;
+    border-top:1.5px solid var(--paper-line);
+    padding-top:16px;
+    margin:22px 0 0;
+  }
+  .entry-note b{color:var(--ink);font-weight:600;}
+
+  footer{
+    margin-top:52px;
+    padding-top:18px;
+    border-top:1.5px solid var(--paper-line);
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .node, .step{animation:rise .5s ease both;}
+    .node:nth-child(1){animation-delay:.02s;}
+    .node:nth-child(3){animation-delay:.1s;}
+    .node:nth-child(5){animation-delay:.18s;}
+    .step:nth-child(1){animation-delay:.02s;}
+    .step:nth-child(3){animation-delay:.08s;}
+    .step:nth-child(5){animation-delay:.14s;}
+    .step:nth-child(7){animation-delay:.2s;}
+    .step:nth-child(9){animation-delay:.26s;}
+    .step:nth-child(11){animation-delay:.32s;}
+  }
+  @keyframes rise{
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker">IIM Kozhikode · Doctoral Program in Management · Design Science Research</p>
+    <h1>How design science research actually moves</h1>
+    <p class="lede">Two ways researchers picture the same activity: Hevner's three cycles show what a DSR project stays connected to while it runs; Peffers' six steps show what it walks through, in order. Click a piece of either diagram to read what happens there.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-target="cycles" role="tab" aria-selected="true">The three cycles</button>
+    <button class="tab" data-target="steps" role="tab" aria-selected="false">The six steps</button>
+  </nav>
+
+  <!-- THREE CYCLES VIEW -->
+  <section class="view active" id="cycles">
+    <div class="diagram">
+      <button class="node active" data-id="environment">
+        <span class="icon">◔</span>
+        <span class="name">Environment</span>
+        <span class="sub">People, organisations, technology — where the problem lives</span>
+      </button>
+      <div class="connector">
+        <span class="arrow-h">⇄</span><span class="arrow-v">⇅</span>
+        <span class="clabel">Relevance Cycle</span>
+      </div>
+      <button class="node" data-id="design">
+        <span class="icon">◑</span>
+        <span class="name">Design science research</span>
+        <span class="sub">Build, evaluate, rebuild — the working core</span>
+      </button>
+      <div class="connector">
+        <span class="arrow-h">⇄</span><span class="arrow-v">⇅</span>
+        <span class="clabel">Rigor Cycle</span>
+      </div>
+      <button class="node" data-id="knowledge">
+        <span class="icon">◕</span>
+        <span class="name">Knowledge base</span>
+        <span class="sub">Theories, methods, prior artefacts — what the field already knows</span>
+      </button>
+    </div>
+
+    <div class="detail" id="cycle-detail"></div>
+  </section>
+
+  <!-- SIX STEPS VIEW -->
+  <section class="view" id="steps">
+    <div class="steps">
+      <button class="step active" data-id="s1"><span class="num">1</span><span class="label">Problem Identification &amp; Motivation</span></button>
+      <span class="sep">›</span>
+      <button class="step" data-id="s2"><span class="num">2</span><span class="label">Define Objectives</span></button>
+      <span class="sep">›</span>
+      <button class="step" data-id="s3"><span class="num">3</span><span class="label">Design &amp; Development</span></button>
+      <span class="sep">›</span>
+      <button class="step" data-id="s4"><span class="num">4</span><span class="label">Demonstration</span></button>
+      <span class="sep">›</span>
+      <button class="step" data-id="s5"><span class="num">5</span><span class="label">Evaluation</span><span class="badge">↺ often loops back</span></button>
+      <span class="sep">›</span>
+      <button class="step" data-id="s6"><span class="num">6</span><span class="label">Communication</span></button>
+    </div>
+
+    <p class="entry-note"><b>Where you start isn't fixed.</b> Peffers et al. describe four legitimate entry points: problem-centred (start at Step 1), objective-centred (start at Step 2), design-centred — working from an existing artefact (start at Step 3), or client/context-initiated — starting from a solution already in use and working backward. Every route still passes through all six steps before it's done.</p>
+
+    <div class="detail" id="step-detail"></div>
+  </section>
+
+  <footer>
+    Maps to Sessions 3 and 5 of the DSR course (DPM19, Term 5) — the three-cycle framework and the DSRM process model. Prof. Kalpit Sharma, IIM Kozhikode.
+  </footer>
+</div>
+
+<script>
+  const cycleData = {
+    environment: {
+      title: "Environment — carried by the Relevance Cycle",
+      body: "The application environment is where the problem actually lives: the people affected by it, the organisational structures around it, and whatever technology is already in place. The Relevance Cycle brings requirements from this environment into the research, and later carries the finished artefact back out to be tested under real conditions.",
+      tags: ["R8 · Problem Identification & Relevance", "TB Ch.14"]
+    },
+    design: {
+      title: "Design science research — the Design Cycle",
+      body: "This is the fastest-moving loop in the project, and where most of the researcher's time actually goes: build a version of the artefact, evaluate it, learn something, rebuild. The artefact can be a construct, a model, a method, or a working instantiation — it gets refined here until it's ready to face both the environment and the knowledge base.",
+      tags: ["R9 · Design Principles & Theory Building", "R7 · Action Design Research", "TB Ch.4"]
+    },
+    knowledge: {
+      title: "Knowledge base — carried by the Rigor Cycle",
+      body: "The knowledge base holds the field's foundations — theories, frameworks, prior artefacts — and its methodologies — evaluation techniques, formalisms, measures. The Rigor Cycle draws on this to ground the design in more than intuition, and feeds new principles, theories, or methods back into it once the project concludes.",
+      tags: ["R12 · Nature of Theory in IS", "R13 · Theorizing in DSR", "RB7 · Sciences of the Artificial"]
+    }
+  };
+
+  const stepData = {
+    s1: {
+      title: "1. Problem Identification & Motivation",
+      body: "Name the problem precisely enough that a solution could be recognised if you saw one, and make the case — for both research and practice — that solving it is worth the effort.",
+      tags: ["R8", "TB Ch.14"]
+    },
+    s2: {
+      title: "2. Define Objectives of a Solution",
+      body: "Translate the problem into what a solution should achieve: concrete, measurable targets where possible, or a clear qualitative description of 'better' where numbers don't apply.",
+      tags: ["R4 · DSRM"]
+    },
+    s3: {
+      title: "3. Design & Development",
+      body: "Create the artefact itself — construct, model, method, or instantiation — so that it embodies the objectives from Step 2. This is where the Design Cycle, above, runs hardest and most often.",
+      tags: ["R9", "TB Ch.4"]
+    },
+    s4: {
+      title: "4. Demonstration",
+      body: "Put the artefact to work on at least one real instance of the problem — a case study, an experiment, a simulation — to show it can actually be used, not just described.",
+      tags: ["R7 · Action Design Research"]
+    },
+    s5: {
+      title: "5. Evaluation",
+      body: "Measure what the artefact actually achieved against the objectives set in Step 2, using whichever mix of methods fits: technical benchmarks, user studies, or expert review. Falling short here usually sends the project back to Step 3.",
+      tags: ["R6 · FEDS Framework", "R10 · Evaluation Taxonomy", "R11 · Evaluation Patterns"]
+    },
+    s6: {
+      title: "6. Communication",
+      body: "Report the problem, the artefact, and the evidence for its utility, novelty, and rigor — written so both researchers who might extend it and practitioners who might use it can act on it.",
+      tags: ["R15 · Transparency in DSR"]
+    }
+  };
+
+  function renderDetail(container, item){
+    container.innerHTML = `
+      <h3>${item.title}</h3>
+      <p>${item.body}</p>
+      <div class="chips">${item.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+    `;
+  }
+
+  // Tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+
+  // Cycle nodes
+  const cycleDetailEl = document.getElementById('cycle-detail');
+  document.querySelectorAll('.node').forEach(node => {
+    node.addEventListener('click', () => {
+      document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
+      node.classList.add('active');
+      renderDetail(cycleDetailEl, cycleData[node.dataset.id]);
+    });
+  });
+  renderDetail(cycleDetailEl, cycleData.environment);
+
+  // Steps
+  const stepDetailEl = document.getElementById('step-detail');
+  document.querySelectorAll('.step').forEach(step => {
+    step.addEventListener('click', () => {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      step.classList.add('active');
+      renderDetail(stepDetailEl, stepData[step.dataset.id]);
+    });
+  });
+  renderDetail(stepDetailEl, stepData.s1);
+</script>
+</body>
+</html>
