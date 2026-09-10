@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design and natural science research on IT — March &amp; Smith (1995)</title>
+<style>
+  :root{
+    --ink:#1c2a2f;
+    --ink-soft:#4a5a5f;
+    --paper:#f2f0e8;
+    --paper-raised:#fbfaf5;
+    --line:#d8d4c6;
+    --design:#2d5f8a;
+    --design-soft:#e4edf4;
+    --design-deep:#193d59;
+    --natural:#3f6e4a;
+    --natural-soft:#e6efe4;
+    --natural-deep:#274630;
+    --amber:#b3781f;
+    --amber-soft:#f3e6cd;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    --mono:'SF Mono',Consolas,Menlo,monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding:90px 0 60px;
+    border-bottom:1px solid var(--line);
+  }
+  .kicker{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.04em;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  h1.title{
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(34px,5vw,54px);
+    line-height:1.12;
+    margin:0 0 22px;
+    max-width:760px;
+  }
+  .title em{font-style:italic;color:var(--design-deep);}
+  p.dek{
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--ink-soft);
+    max-width:620px;
+    margin:0 0 28px;
+  }
+  .cite{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft);}
+
+  /* toggle strip */
+  .lens{
+    margin-top:44px;
+    display:flex;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    max-width:520px;
+  }
+  .lens button{
+    flex:1;
+    padding:13px 10px;
+    border:none;
+    background:var(--paper-raised);
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:500;
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .lens button + button{border-left:1px solid var(--line);}
+  .lens button.active.design{background:var(--design);color:#fff;}
+  .lens button.active.natural{background:var(--natural);color:#fff;}
+  #lensCard{
+    margin-top:0;
+    padding:22px 24px;
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 10px 10px;
+    max-width:520px;
+    background:var(--paper-raised);
+    font-size:14.5px;
+    color:var(--ink-soft);
+    min-height:64px;
+  }
+  #lensCard b{color:var(--ink);}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:64px 0;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  h2.h{
+    font-family:var(--serif);
+    font-size:28px;
+    font-weight:400;
+    margin:0 0 10px;
+  }
+  p.lede{
+    color:var(--ink-soft);
+    max-width:660px;
+    font-size:15.5px;
+    margin:0 0 34px;
+  }
+
+  /* ---------- TWO-SCIENCE CARDS ---------- */
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .card{
+    border-radius:12px;
+    padding:24px 24px 26px;
+    border:1px solid var(--line);
+  }
+  .card.natural{background:var(--natural-soft);border-color:#c9dbc7;}
+  .card.design{background:var(--design-soft);border-color:#c4d6e3;}
+  .card h3{
+    font-family:var(--serif);
+    font-size:20px;
+    font-weight:400;
+    margin:0 0 6px;
+  }
+  .card.natural h3{color:var(--natural-deep);}
+  .card.design h3{color:var(--design-deep);}
+  .card .role{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 14px;
+  }
+  .card p{font-size:14.5px;color:var(--ink);margin:0 0 10px;}
+  .card ul{margin:10px 0 0;padding-left:18px;font-size:14px;color:var(--ink-soft);}
+  .card li{margin-bottom:5px;}
+  .midline{
+    text-align:center;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    margin:16px 0 -4px;
+  }
+
+  /* ---------- FRAMEWORK GRID ---------- */
+  .grid-shell{
+    display:grid;
+    grid-template-columns:130px repeat(4,1fr);
+    gap:6px;
+    font-size:13.5px;
+  }
+  .grid-shell .hd{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:flex-end;
+    padding-bottom:8px;
+  }
+  .grid-shell .hd.act{justify-content:center;text-align:center;}
+  .grid-shell .rowlabel{
+    font-family:var(--serif);
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    padding-right:8px;
+  }
+  .cell{
+    border-radius:8px;
+    padding:12px 10px;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    cursor:pointer;
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-weight:500;
+    color:var(--ink-soft);
+    transition:transform .1s, box-shadow .15s;
+  }
+  .cell:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .cell.design-col{background:var(--design-soft);color:var(--design-deep);border-color:#c4d6e3;}
+  .cell.natural-col{background:var(--natural-soft);color:var(--natural-deep);border-color:#c9dbc7;}
+  .cell.selected{outline:2px solid var(--amber);outline-offset:-2px;}
+
+  #cellDetail{
+    margin-top:22px;
+    padding:22px 24px;
+    border-radius:12px;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    min-height:110px;
+  }
+  #cellDetail .tag{
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    margin-bottom:8px;
+    display:inline-block;
+    padding:3px 9px;
+    border-radius:5px;
+  }
+  #cellDetail .tag.design{background:var(--design-soft);color:var(--design-deep);}
+  #cellDetail .tag.natural{background:var(--natural-soft);color:var(--natural-deep);}
+  #cellDetail h4{font-family:var(--serif);font-weight:400;font-size:19px;margin:0 0 8px;}
+  #cellDetail p{font-size:14.5px;color:var(--ink-soft);margin:0 0 10px;}
+  #cellDetail .ex{
+    font-size:13.5px;
+    color:var(--ink);
+    background:var(--paper);
+    border-left:3px solid var(--amber);
+    padding:9px 13px;
+    border-radius:0 6px 6px 0;
+  }
+
+  /* ---------- OUTPUT LADDER ---------- */
+  .ladder{display:flex;flex-direction:column;gap:0;}
+  .rung{
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:20px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .rung:last-child{border-bottom:1px solid var(--line);}
+  .rung .label{
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--design-deep);
+    padding-top:2px;
+  }
+  .rung .desc p{margin:0 0 8px;font-size:14.5px;color:var(--ink-soft);}
+  .rung .desc .instance{
+    font-size:13px;
+    font-family:var(--mono);
+    color:var(--amber);
+    background:var(--amber-soft);
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:5px;
+    margin-top:2px;
+  }
+
+  /* ---------- CASE STUDY TIMELINE ---------- */
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{
+    content:'';
+    position:absolute;left:6px;top:6px;bottom:6px;
+    width:2px;background:var(--line);
+  }
+  .t-item{position:relative;margin-bottom:26px;}
+  .t-item:last-child{margin-bottom:0;}
+  .t-item::before{
+    content:'';
+    position:absolute;left:-26px;top:4px;
+    width:11px;height:11px;border-radius:50%;
+    background:var(--design);border:2px solid var(--paper);
+  }
+  .t-item.natural-dot::before{background:var(--natural);}
+  .t-item h4{font-family:var(--serif);font-weight:400;font-size:17px;margin:0 0 4px;}
+  .t-item p{font-size:14.5px;color:var(--ink-soft);margin:0;}
+
+  /* ---------- ACCORDION EXAMPLES ---------- */
+  .acc-item{
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:10px;
+    overflow:hidden;
+    background:var(--paper-raised);
+  }
+  .acc-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:16px 20px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .acc-head .num{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+    margin-right:12px;
+  }
+  .acc-head .q{
+    font-size:15px;
+    font-weight:500;
+    color:var(--ink);
+    flex:1;
+  }
+  .acc-head .chev{
+    font-size:14px;
+    color:var(--ink-soft);
+    transition:transform .18s;
+    flex-shrink:0;
+  }
+  .acc-item.open .chev{transform:rotate(45deg);}
+  .acc-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .25s ease;
+  }
+  .acc-body-inner{
+    padding:0 20px 20px 48px;
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+  .acc-body-inner b{color:var(--ink);font-weight:500;}
+
+  /* ---------- PRESCRIPTIONS ---------- */
+  .presc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .presc .p-card{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    background:var(--paper-raised);
+  }
+  .presc .p-num{
+    font-family:var(--serif);
+    font-size:30px;
+    color:var(--design);
+    line-height:1;
+    margin-bottom:10px;
+  }
+  .presc h4{font-size:15px;font-weight:500;margin:0 0 8px;}
+  .presc p{font-size:13.5px;color:var(--ink-soft);margin:0;}
+
+  footer{
+    padding:40px 0 70px;
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:720px){
+    .pair{grid-template-columns:1fr;}
+    .grid-shell{grid-template-columns:70px repeat(4,1fr);font-size:11px;}
+    .grid-shell .hd{font-size:9px;}
+    .cell{min-height:52px;padding:6px 4px;}
+    .presc{grid-template-columns:1fr;}
+    .rung{grid-template-columns:1fr;gap:6px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="kicker">READING GUIDE · DECISION SUPPORT SYSTEMS, 15 (1995) 251–266</p>
+    <h1 class="title">Two ways to do science on things<br>we <em>build</em>, not things we <em>find</em>.</h1>
+    <p class="dek">March &amp; Smith argue that IT research is really two disciplines wearing one coat: <strong>design science</strong>, which builds and evaluates useful artifacts, and <strong>natural science</strong>, which theorizes about and justifies why those artifacts work. Neither is the junior partner.</p>
+    <p class="cite">Salvatore T. March &amp; Gerald F. Smith · University of Minnesota / University of Northern Iowa</p>
+
+    <div class="lens">
+      <button class="active design" data-lens="design">Read as design science</button>
+      <button class="natural" data-lens="natural">Read as natural science</button>
+    </div>
+    <div id="lensCard"></div>
+  </header>
+
+  <!-- ================= THE CORE DISTINCTION ================= -->
+  <section id="distinction">
+    <h2 class="h">The distinction the whole paper hinges on</h2>
+    <p class="lede">This is not Simon's natural-vs-artificial-phenomena split. You can do natural science <em>about</em> an artifact (studying how a database affects users). The line is about intent: are you trying to explain reality, or improve it?</p>
+
+    <div class="pair">
+      <div class="card natural">
+        <p class="role">Explains what is</p>
+        <h3>Natural science</h3>
+        <p>Aims to understand and explain reality. Products are judged against <b>truth</b> — do the claims match observed facts, and predict future ones?</p>
+        <ul>
+          <li>Activities: <b>theorize</b>, then <b>justify</b></li>
+          <li>Product: theories</li>
+          <li>Method: hypothetico-deductive testing, falsification</li>
+        </ul>
+      </div>
+      <div class="card design">
+        <p class="role">Creates what ought to be</p>
+        <h3>Design science</h3>
+        <p>Aims to devise artifacts that serve human purposes. Products are judged against <b>utility</b> — does it work, is it an improvement?</p>
+        <ul>
+          <li>Activities: <b>build</b>, then <b>evaluate</b></li>
+          <li>Product: constructs, models, methods, instantiations</li>
+          <li>Method: construction + performance metrics</li>
+        </ul>
+      </div>
+    </div>
+    <p class="midline">↕ the two feed each other — see "why they need each other" below ↕</p>
+  </section>
+
+  <!-- ================= THE 4x4 FRAMEWORK ================= -->
+  <section id="framework">
+    <h2 class="h">The 4 × 4 research framework</h2>
+    <p class="lede">Cross four <b>outputs</b> against four <b>activities</b> and you get sixteen legitimate kinds of IT research contribution. Click a cell.</p>
+
+    <div class="grid-shell" id="gridShell">
+      <div class="hd"></div>
+      <div class="hd act">Build</div>
+      <div class="hd act">Evaluate</div>
+      <div class="hd act">Theorize</div>
+      <div class="hd act">Justify</div>
+
+      <div class="rowlabel">Constructs</div>
+      <div class="cell design-col" data-row="Constructs" data-col="Build">propose vocabulary</div>
+      <div class="cell design-col" data-row="Constructs" data-col="Evaluate">test clarity, fit</div>
+      <div class="cell natural-col" data-row="Constructs" data-col="Theorize">explain why terms work</div>
+      <div class="cell natural-col" data-row="Constructs" data-col="Justify">test that explanation</div>
+
+      <div class="rowlabel">Model</div>
+      <div class="cell design-col" data-row="Model" data-col="Build">represent problem/solution</div>
+      <div class="cell design-col" data-row="Model" data-col="Evaluate">check fidelity, robustness</div>
+      <div class="cell natural-col" data-row="Model" data-col="Theorize">explain model's success</div>
+      <div class="cell natural-col" data-row="Model" data-col="Justify">gather supporting evidence</div>
+
+      <div class="rowlabel">Method</div>
+      <div class="cell design-col" data-row="Method" data-col="Build">devise algorithm/procedure</div>
+      <div class="cell design-col" data-row="Method" data-col="Evaluate">measure efficiency, ease</div>
+      <div class="cell natural-col" data-row="Method" data-col="Theorize">explain how it works</div>
+      <div class="cell natural-col" data-row="Method" data-col="Justify">prove or test claims</div>
+
+      <div class="rowlabel">Instantiation</div>
+      <div class="cell design-col" data-row="Instantiation" data-col="Build">ship a working system</div>
+      <div class="cell design-col" data-row="Instantiation" data-col="Evaluate">study real-world impact</div>
+      <div class="cell natural-col" data-row="Instantiation" data-col="Theorize">explain observed effects</div>
+      <div class="cell natural-col" data-row="Instantiation" data-col="Justify">test the effects claim</div>
+    </div>
+
+    <div id="cellDetail"></div>
+  </section>
+
+  <!-- ================= OUTPUT LADDER ================= -->
+  <section id="outputs">
+    <h2 class="h">The four design-science outputs, concretely</h2>
+    <p class="lede">Notice what's missing from this list: <b>theories</b>. That's deliberate — theories belong to natural science.</p>
+    <div class="ladder" id="ladder"></div>
+  </section>
+
+  <!-- ================= CASE STUDY ================= -->
+  <section id="casestudy">
+    <h2 class="h">Running case: the relational data model</h2>
+    <p class="lede">The paper keeps returning to Codd's relational model to show the framework in motion — including its own blind spots.</p>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- ================= NUANCE EXAMPLES ================= -->
+  <section id="nuance">
+    <h2 class="h">Eight places PhD students misread this paper</h2>
+    <p class="lede">The framework sounds simple until you try to classify your own dissertation with it. These are the finer distinctions that trip people up.</p>
+    <div id="accordion"></div>
+  </section>
+
+  <!-- ================= PRESCRIPTIONS ================= -->
+  <section id="prescriptions">
+    <h2 class="h">What the authors ask the field to do differently</h2>
+    <div class="presc">
+      <div class="p-card">
+        <div class="p-num">1</div>
+        <h4>Stop hunting one deep theory of IT</h4>
+        <p>IT artifacts are human-designed, not natural kinds. Theories may need to be grounded in theories of the <i>people</i> the technology affects, not in some IT-native physics.</p>
+      </div>
+      <div class="p-card">
+        <div class="p-num">2</div>
+        <h4>Expect your results to perish</h4>
+        <p>Artifacts get replaced; so does artifact-specific knowledge. A theory of how programmers used a dead language isn't a lasting contribution.</p>
+      </div>
+      <div class="p-card">
+        <div class="p-num">3</div>
+        <h4>Classify before you build</h4>
+        <p>Explicating which of the sixteen cells your work occupies stops the field from re-building and re-naming things that already exist, ungrounded and unevaluated.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    March, S.T. &amp; Smith, G.F. (1995). Design and natural science research on information technology. <i>Decision Support Systems</i>, 15(4), 251–266. · Interactive guide generated for study purposes.
+  </footer>
+</div>
+
+<script>
+  // ---------- LENS TOGGLE ----------
+  const lensCopy = {
+    design: "<b>Design science lens:</b> the paper is a manifesto for builders. It says constructing a working construct, model, method, or instantiation is real research — provided it's judged by whether it works, not whether it's 'theoretical enough.'",
+    natural: "<b>Natural science lens:</b> the paper is a warning to builders. Building things that work isn't enough on its own — without theorizing why they work and justifying that explanation, the field keeps reinventing the same artifact under a new name."
+  };
+  const lensBtns = document.querySelectorAll('.lens button');
+  const lensCard = document.getElementById('lensCard');
+  function setLens(which){
+    lensBtns.forEach(b=>b.classList.toggle('active', b.dataset.lens===which));
+    lensCard.innerHTML = lensCopy[which];
+  }
+  lensBtns.forEach(b=>b.addEventListener('click', ()=>setLens(b.dataset.lens)));
+  setLens('design');
+
+  // ---------- FRAMEWORK GRID ----------
+  const cellData = {
+    "Constructs|Build": {tag:"design", title:"Build constructs", body:"Propose the vocabulary of a domain — the concepts used to describe problems and solutions.", ex:"Codd introducing \u201crelation,\u201d \u201ctuple,\u201d and \u201cnormal form\u201d as the language of the relational model."},
+    "Constructs|Evaluate": {tag:"design", title:"Evaluate constructs", body:"Assess a vocabulary for completeness, simplicity, elegance, and ease of use.", ex:"Comparing rival data-modelling formalisms on how well their entity concepts capture real requirements \u2014 not on whether the concepts are \u2018true.\u2019"},
+    "Constructs|Theorize": {tag:"natural", title:"Theorize about constructs", body:"Explain why a set of concepts affects performance or cognition the way it does.", ex:"Norman's construct of the \u2018gulf\u2019 between a user's mental model and an interface's presented model."},
+    "Constructs|Justify": {tag:"natural", title:"Justify theories of constructs", body:"Gather evidence that a proposed explanation of a construct's effects actually holds.", ex:"Empirical studies testing whether the \u2018gulf of execution/evaluation\u2019 idea predicts real difficulty with a data-modelling formalism."},
+    "Model|Build": {tag:"design", title:"Build a model", body:"Combine constructs into propositions that represent a specific problem or solution.", ex:"An Entity-Relationship diagram of one company's order-management data requirements."},
+    "Model|Evaluate": {tag:"design", title:"Evaluate a model", body:"Judge fidelity to the task, completeness, level of detail, and internal consistency.", ex:"March & Rho extending Cornell and Yu's distributed-database model to also capture replication and concurrency control."},
+    "Model|Theorize": {tag:"natural", title:"Theorize about models", body:"Explain why a modelling approach corresponds well (or poorly) to how people actually think about the task.", ex:"Positing that semantic data models better match end-users' mental model of a database than relational tables do."},
+    "Model|Justify": {tag:"natural", title:"Justify theories of models", body:"Test whether that explanatory claim about a model's fit holds up under evidence.", ex:"Chan, Wei & Siau's comparison showing semantic models outperform the relational model for inexperienced end-users \u2014 then asking why."},
+    "Method|Build": {tag:"design", title:"Build a method", body:"Devise a set of steps, an algorithm or guideline, for performing a task.", ex:"A new heuristic for allocating data and operations across nodes in a distributed database."},
+    "Method|Evaluate": {tag:"design", title:"Evaluate a method", body:"Measure operationality, efficiency, generality, and ease of use \u2014 for specific tasks.", ex:"Comparing the simplex and ellipsoid algorithms not just on worst-case complexity but on real iteration counts in practice."},
+    "Method|Theorize": {tag:"natural", title:"Theorize about methods", body:"Explain how or why a method achieves its results, formally or behaviorally.", ex:"Explaining how genetic algorithms' control parameters (mutation rate, population size) affect convergence."},
+    "Method|Justify": {tag:"natural", title:"Justify theories of methods", body:"Prove the claim mathematically, or test it empirically against practice.", ex:"Proving a database-design algorithm is optimal under its formal model \u2014 valid only within that model's assumptions."},
+    "Instantiation|Build": {tag:"design", title:"Build an instantiation", body:"Realize an artifact in its actual operating environment \u2014 the working system itself.", ex:"An early Group Decision Support System (GDSS) built to run real meetings, before its underlying constructs were fully named."},
+    "Instantiation|Evaluate": {tag:"design", title:"Evaluate an instantiation", body:"Assess efficiency, effectiveness, and impact on users and environment \u2014 separating the tool from what it embodies.", ex:"Comparing CASE tools not on their marketing but on how much design latitude they actually leave end users."},
+    "Instantiation|Theorize": {tag:"natural", title:"Theorize about instantiations", body:"Explain observed effects of a deployed artifact on its environment \u2014 often a stepping stone to a more general theory.", ex:"Explaining how UNIX's process/interrupt model reshaped how a generation of programmers thought about software."},
+    "Instantiation|Justify": {tag:"natural", title:"Justify theories of instantiations", body:"Gather evidence for claims about why a deployed system produced the effects it did.", ex:"Testing Adaptive Structuration Theory's predictions against real GDSS use across different group and task types."}
+  };
+  const cells = document.querySelectorAll('.cell');
+  const detail = document.getElementById('cellDetail');
+  function paintDetail(row, col){
+    const d = cellData[row+"|"+col];
+    detail.innerHTML =
+      '<span class="tag '+d.tag+'">'+ (d.tag==='design' ? 'Design science' : 'Natural science') +' \u00b7 '+row+' \u00b7 '+col+'</span>'+
+      '<h4>'+d.title+'</h4>'+
+      '<p>'+d.body+'</p>'+
+      '<div class="ex">'+d.ex+'</div>';
+  }
+  cells.forEach(c=>{
+    c.addEventListener('click', ()=>{
+      cells.forEach(x=>x.classList.remove('selected'));
+      c.classList.add('selected');
+      paintDetail(c.dataset.row, c.dataset.col);
+      detail.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  });
+  // default open cell
+  cells[0].classList.add('selected');
+  paintDetail(cells[0].dataset.row, cells[0].dataset.col);
+
+  // ---------- OUTPUT LADDER ----------
+  const outputs = [
+    {label:"Constructs", text:"The vocabulary of a domain \u2014 concepts used to describe problems and specify solutions. Can be highly formal (entities, attributes, constraints) or informal (consensus, participation).", instance:"e.g. \u201centity,\u201d \u201crelationship,\u201d \u201cnormal form\u201d"},
+    {label:"Model", text:"A set of propositions using those constructs to represent a task, situation, or artifact \u2014 valued for utility, not truth. Certain inaccuracies are fine if they don't matter for the purpose.", instance:"e.g. an ER diagram of one system's data requirements"},
+    {label:"Method", text:"A set of steps \u2014 an algorithm or guideline \u2014 for performing a task, built on top of a model and its constructs. Often used to translate between representations.", instance:"e.g. a normalization procedure; a systems-development methodology"},
+    {label:"Instantiation", text:"The realization of an artifact in its actual environment. May precede formal articulation of its own constructs, models, and methods \u2014 built first on intuition, formalized later.", instance:"e.g. a shipped CASE tool; a working GDSS; the UNIX kernel"}
+  ];
+  document.getElementById('ladder').innerHTML = outputs.map(o=>
+    '<div class="rung"><div class="label">'+o.label+'</div><div class="desc"><p>'+o.text+'</p><span class="instance">'+o.instance+'</span></div></div>'
+  ).join('');
+
+  // ---------- TIMELINE ----------
+  const tl = [
+    {n:false, h:"Build \u2014 a first construct", p:"Codd proposes relations and relational operators to describe stored data. Never used this way before, though the math existed in set theory."},
+    {n:false, h:"Adopted without Evaluate", p:"The model becomes dominant in research and practice for a decade \u2014 without being systematically compared against rival formalisms like DIAM."},
+    {n:true, h:"A gap surfaces (natural science)", p:"When Chan et al. finally compare it to graphical, semantic alternatives for end-user interaction, the relational model performs worse \u2014 raising the question of why."},
+    {n:false, h:"The blind spot", p:"Because the model deliberately hid physical storage details to give 'well-formed' logical structures, researchers lost sight of its costs for physical database design \u2014 nested records and pointers, disallowed by the model, turn out to matter for efficiency."},
+    {n:false, h:"History repeats the fix", p:"Object-oriented DBMSs later reintroduce complex record structures and system pointers \u2014 representations very close to pre-relational designs like DIAM."}
+  ];
+  document.getElementById('timeline').innerHTML = tl.map(t=>
+    '<div class="t-item'+(t.n?' natural-dot':'')+'"><h4>'+t.h+'</h4><p>'+t.p+'</p></div>'
+  ).join('');
+
+  // ---------- ACCORDION ----------
+  const nuances = [
+    {q:"Isn't a \u2018model\u2019 basically a small theory?", a:"No \u2014 and conflating the two is the single most common error. Natural scientists use \u201cmodel\u201d as a near-synonym for theory. In this framework, a model is judged by <b>utility</b> for a design task, not by correspondence to truth. Asking \u201cis your ER model true?\u201d is the wrong question for a design-science contribution; \u201cis it useful, and for what task?\u201d is the right one."},
+    {q:"If IT artifacts are man-made, is studying them always design science?", a:"No. The natural/design split is about the researcher's <b>intent</b>, not the subject's origin. A dissertation explaining how relational databases change end-user query behavior is natural science, even though databases are artifacts \u2014 because the goal is to explain, not to build. Two students citing the same literature can be doing entirely different kinds of science."},
+    {q:"Is building 'the first' instantiation of anything automatically a contribution?", a:"The paper explicitly says no. A first instantiation is valuable when there's real <b>uncertainty</b> about whether the underlying constructs/models/methods will actually work in practice. Applying already-validated methods to a well-understood, well-structured task (their example: an expert system for a limited-choice stock-picking task) is \u201cof marginal scientific significance,\u201d even as a first."},
+    {q:"Can I just publish a new construct or model and call it a contribution?", a:"Only once, roughly. A <b>first</b> build in an area is legitimate research on its own. A <b>second or subsequent</b> one needs an Evaluate component \u2014 metrics and comparison \u2014 to be a contribution. The paper's critique of the data-modelling literature (\u201cnot yet another\u2026\u201d) is really a critique of build papers that never got compared to what came before."},
+    {q:"If I prove a theorem about my algorithm, is that enough justification?", a:"Only within scope. A mathematical proof of \u201coptimality\u201d is valid strictly <b>within the model's own assumptions</b>. It says nothing about whether those assumptions hold in the real environment. Formal theories \u201cmust be tested in practice to validate the formalism\u201d \u2014 mathematical justification and empirical justification are not substitutes for each other."},
+    {q:"Should I just apply theories from psychology/economics/sociology to my IT phenomenon?", a:"Only with a reason to think IT changes the applicability. The paper's joke about testing Newton's gravity by dropping a PC out a window exists to warn against reflexive borrowing. The praised counter-example is Adaptive Structuration Theory: DeSanctis & Poole adapted structuration theory specifically because GDSS technology plausibly alters group dynamics in ways general social theory hadn't accounted for."},
+    {q:"Doesn't a working system always follow from a well-worked-out theory?", a:"The paper flips this. An instantiation can <b>precede</b> the formal articulation of its own constructs, models, and methods. UNIX is the given example \u2014 it operationalized ideas about processes and interrupts that later shaped how a generation thought about programming, without waiting for a mature theory of operating systems first."},
+    {q:"Is design-science 'progress' the same shape as natural-science progress?", a:"No. In natural science, later theories typically refine or subsume earlier ones, and older evidence stays valid. In design science, progress means an existing technology gets <b>replaced</b>. That gives design-science contributions a much shorter half-life \u2014 they're judged against whatever is currently dominant, not against an eternal standard."}
+  ];
+  document.getElementById('accordion').innerHTML = nuances.map((n,i)=>
+    '<div class="acc-item">'+
+      '<div class="acc-head" onclick="toggleAcc(this)">'+
+        '<span class="q"><span class="num">0'+(i+1)+'</span>'+n.q+'</span>'+
+        '<span class="chev">+</span>'+
+      '</div>'+
+      '<div class="acc-body"><div class="acc-body-inner">'+n.a+'</div></div>'+
+    '</div>'
+  ).join('');
+  function toggleAcc(headEl){
+    const item = headEl.parentElement;
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.acc-item.open').forEach(o=>{
+      o.classList.remove('open');
+      o.querySelector('.acc-body').style.maxHeight = null;
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+  }
+</script>
+</body>
+</html>
